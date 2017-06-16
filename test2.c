@@ -61,7 +61,6 @@ words* readFromFile(char *path, words *head){
             head = pushInOrderTest2(head, test);
     }
     fclose(f);
-    printf("w pliku są %u spacje\n", enterCounter);
     return head;
 }
 
