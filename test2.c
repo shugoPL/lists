@@ -1,4 +1,4 @@
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -7,7 +7,6 @@ typedef struct {
     unsigned int counter;
     struct words *next;
 }words;
- 
 
 void printList(words *head);
 words* elementInit( words *element);
@@ -25,7 +24,7 @@ int main(){
     
     words *head = NULL;
 
-    head = readFromFile("d:\\test.txt", head);
+    head = readFromFile("C:\\test.txt", head);
     printList(head);    
     
     return 0;
@@ -48,12 +47,21 @@ words* elementInit( words *element){
 
 words* readFromFile(char *path, words *head){
     FILE *f = fopen(path, "r");
+    unsigned int enterCounter = 0;
     char test[256];
     while(fscanf(f, "%s", test) != EOF ){
+        /*Sprawdzenie czy pierwsza litera jest duża i konwersja 
+         * na małą jeżeli jest */
+        if( test[0] >= 65 && test[0] <= 90)
+            test[0] = test[0] + 32;
+                
+        /* Sprawdzenie czy słowo jest już na liście jeżeli jest dodanie ilości
+         o 1 jeże nie ma dodanie do listy w kolejności alfabetycznej */
         if( searchList(head, test) == 0)
             head = pushInOrderTest2(head, test);
     }
     fclose(f);
+    printf("w pliku są %u spacje\n", enterCounter);
     return head;
 }
 
@@ -101,7 +109,7 @@ words* pushInMiddle(words *element, char *string){
     words *node = initNode(string);
     
     while(element != NULL){
-        words *nextNode = element->next; //Linia pozwalaj�ca sprawdzi� warto�� nast�pnego elementu
+        words *nextNode = element->next; //Linia pozwalaj¹ca sprawdziæ wartoœæ nastêpnego elementu
         
         if(nextNode == NULL){
             pushOnEnd(start, string);
@@ -132,5 +140,3 @@ words* pushInOrderTest2(words *element, char *string ){
         pushInMiddle(node, string);
     }
 }
-
-
