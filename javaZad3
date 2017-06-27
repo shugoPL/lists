@@ -1,0 +1,194 @@
+package dzielo;
+
+import java.awt.Button;
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.JOptionPane;
+
+
+public class Dzielo extends Frame implements WindowListener, ActionListener {
+	private static final long serialVersionUID = 1L;
+	private Label imie, nazwisko, przepGodziny, stawkaGodzinowa;
+	private TextField imieTx, nazwiskoTx, przepGodzinyTx, stawkaGodzinowaTx;
+	private Button oblicz, koniec;
+	private Checkbox dwadziescia, piecdziesiat;
+	
+	public Dzielo() {
+		super("Aplikacja Dzieło");
+		setSize(800,600);
+		setVisible(true);
+		setResizable(false);
+		repaint();
+		setLayout(null);
+		this.addWindowListener(this);
+		
+		imie = new Label("Imie pracownika: ");
+		add(imie);
+		imie.setBounds(50, 150, 100, 20);
+		imieTx = new TextField();
+		add(imieTx);
+		imieTx.setBounds(200, 150, 200, 20);
+		
+		nazwisko = new Label("Nazwisko pracownika: ");
+		add(nazwisko);
+		nazwisko.setBounds(50, 200, 150, 20);
+		nazwiskoTx = new TextField();
+		add(nazwiskoTx);
+		nazwiskoTx.setBounds(200, 200, 200, 20);
+		
+		przepGodziny = new Label("Przepracowane godziny: ");
+		add(przepGodziny);
+		przepGodziny.setBounds(50, 250, 150, 20);
+		przepGodzinyTx = new TextField();
+		add(przepGodzinyTx);
+		przepGodzinyTx.setBounds(200, 250, 200, 20);
+		
+		
+		stawkaGodzinowa = new Label("Stawka za godzine: ");
+		add(stawkaGodzinowa);
+		stawkaGodzinowa.setBounds(50, 300, 150, 20);
+		stawkaGodzinowaTx = new TextField();
+		add(stawkaGodzinowaTx);
+		stawkaGodzinowaTx.setBounds(200, 300, 200, 20);
+		
+		oblicz = new Button("Oblicz stawkę");
+		add(oblicz);
+		oblicz.setBounds(150, 400, 200, 40);
+		
+		koniec = new Button("Koniec");
+		add(koniec);
+		koniec.setBounds(500, 400, 200, 40);		
+		
+		
+		CheckboxGroup kosztGroup = new CheckboxGroup();
+		dwadziescia = new Checkbox("20%",kosztGroup, false);
+		add(dwadziescia);
+		dwadziescia.setBounds(500, 150, 40, 100);
+		piecdziesiat = new Checkbox("50%", kosztGroup, false);
+		add(piecdziesiat);
+		piecdziesiat.setBounds(500, 220, 40, 100);
+		
+		
+		
+		oblicz.addActionListener(this);
+		koniec.addActionListener(this);
+		
+		
+	}
+
+	public static void main(String[] args) {
+		new Dzielo();
+
+	}
+	
+	public void obliczStawke(){
+		String imieNazwisko = "";
+		Double stawka = .0, godziny = .0, koszt = .0;
+		try{
+			imieNazwisko = imieTx.getText()+" "+nazwiskoTx.getText();
+			stawka = Double.parseDouble(stawkaGodzinowaTx.getText());
+			godziny = Double.parseDouble(przepGodzinyTx.getText());
+				
+			if( dwadziescia.getState() == true ){
+				 koszt = 0.20;
+				 JOptionPane.showMessageDialog(this, "Pracownik: " + imieNazwisko + "\n" +
+							obliczenia(stawka, godziny, koszt));
+			}else if( piecdziesiat.getState() == true ){
+				koszt = 0.50;
+				JOptionPane.showMessageDialog(this, "Pracownik: " + imieNazwisko + "\n" +
+						obliczenia(stawka, godziny, koszt));
+			}else{
+				JOptionPane.showMessageDialog(this, "Nie wybrałeś kosztu uzyskania przychodu");
+			}
+			
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(this, "Nie wpisano wszystkich pól lub wpisano błędną wartość!");
+		}
+		
+	}
+	
+	public String obliczenia(Double stawka, Double godziny, Double kosztPrzychodu){
+		
+		Double stawkaBrutto = stawka * godziny; 
+		Double podatek = 0.0;
+		
+		//Wzór do poprawienia 
+		 podatek = (stawkaBrutto - kosztPrzychodu * stawkaBrutto)*0.18;
+		
+		 Double stawkaNetto = stawkaBrutto - podatek;
+		 
+		return "\nStawka netto: " 
+					+ stawkaNetto 
+					+ "\n Stawka Brutto: " 
+					+ stawkaBrutto 
+					+ "\nNależny podatek = " 
+					+ podatek;
+	}
+	
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		if( (Button) e.getSource() == oblicz ){
+			obliczStawke();
+		}
+		
+		if( (Button) e.getSource() == koniec ){
+			System.exit(0);
+		}
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		System.exit(0);
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
